@@ -1,0 +1,1 @@
+Saída dos comandos lspci -k, lsusb e cat /proc/cpuinfo (preencher com sua saída real)
