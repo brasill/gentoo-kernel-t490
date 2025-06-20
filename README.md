@@ -36,7 +36,7 @@ Este repositório documenta o processo completo de compilação e otimização d
 
 ### 🔧 Pré-requisitos
 
-Instale as ferramentas necessárias:
+Instale as ferramentas necessárias
 
 ```bash
 emerge -av sys-apps/pciutils sys-apps/usbutils sys-kernel/genkernel sys-fs/dosfstools
