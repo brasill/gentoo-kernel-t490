@@ -1,0 +1,28 @@
+# Arquivos de build e kernel
+*.o
+*.ko
+*.mod
+*.mod.c
+*.symvers
+*.order
+
+# Diretórios comuns
+tmp/
+temp/
+cache/
+logs/
+
+# Arquivos de backup
+*.old
+*.bak
+*.config.*
+
+# Initramfs e kernel
+initramfs*
+bzImage
+vmlinuz*
+
+# Arquivos gerados por editores
+*~
+*.swp
+.DS_Store
