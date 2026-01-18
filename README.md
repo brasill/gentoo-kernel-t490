@@ -4,7 +4,6 @@ Este repositório documenta a **compilação, otimização e hardening** do kern
 especificamente para o **Lenovo ThinkPad T490**.
 
 O objetivo é manter **documentação clara, linear e profissional**, evitando subdiretórios desnecessários.
-[evolution-gnome-gentoo](https://github.com/brasill/evolution-gnome-gentoo).
 
 ---
 
