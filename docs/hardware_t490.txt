@@ -1,0 +1,39 @@
+# 🔍 Mapeamento de Hardware do ThinkPad T490
+
+Este arquivo contém as instruções e comandos utilizados para mapear o hardware da máquina. A saída desses comandos é essencial para configurar corretamente o kernel Linux no Gentoo.
+
+---
+
+## 📜 Comandos executados:
+
+# Lista os dispositivos PCI e os drivers em uso
+lspci -k > ~/hardware_t490.txt
+
+# Lista os dispositivos USB
+lsusb >> ~/hardware_t490.txt
+
+# Adiciona informações detalhadas do processador
+cat /proc/cpuinfo >> ~/hardware_t490.txt
+
+---
+
+## 🗺️ Descrição dos comandos:
+
+- ✅ **lspci -k**  
+Lista todos os dispositivos PCI e exibe quais módulos (drivers) do kernel estão sendo utilizados por eles.
+
+- ✅ **lsusb**  
+Mostra os dispositivos conectados nas portas USB.
+
+- ✅ **cat /proc/cpuinfo**  
+Exibe informações detalhadas sobre o processador, como modelo, threads, recursos suportados, etc.
+
+---
+
+## 💾 Exemplo prático — salvar tudo em um único arquivo:
+
+```bash
+lspci -k > ~/hardware_t490.txt
+lsusb >> ~/hardware_t490.txt
+cat /proc/cpuinfo >> ~/hardware_t490.txt
+
