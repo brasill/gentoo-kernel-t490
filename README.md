@@ -117,15 +117,12 @@ grub-mkconfig -o /boot/grub/grub.cfg
 ---
 
 ## 📘 Referências
-Gentoo Handbook - AMD64 Architecture
 
-Gentoo Kernel Configuration Guide
-
-ThinkPad T490 – ArchWiki
-
-Genkernel Documentation
-
-Linux Kernel Documentation
+- [Gentoo Handbook - AMD64 Architecture](https://wiki.gentoo.org/wiki/Handbook:AMD64)
+- [Gentoo Kernel Configuration Guide](https://wiki.gentoo.org/wiki/Kernel/Configuration)
+- [ThinkPad T490 – ArchWiki](https://wiki.archlinux.org/title/Lenovo_ThinkPad_T490)
+- [Genkernel Documentation](https://wiki.gentoo.org/wiki/Genkernel)
+- [Linux Kernel Documentation](https://www.kernel.org/doc/html/latest/)
 
 ---
 
