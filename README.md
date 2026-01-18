@@ -116,6 +116,19 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 ---
 
+## 📘 Referências
+Gentoo Handbook - AMD64 Architecture
+
+Gentoo Kernel Configuration Guide
+
+ThinkPad T490 – ArchWiki
+
+Genkernel Documentation
+
+Linux Kernel Documentation
+
+---
+
 ## 📜 Licença
 
 MIT License
