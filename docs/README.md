@@ -1,6 +1,6 @@
-# 🚀 Kernel Gentoo com Hardening, Boot Determinístico e Arquitetura Dual-Build para ThinkPad T490
+# 🚀 Kernel Gentoo Otimizado para ThinkPad T490
 
-> > **Arquitetura dual-build determinística · Hardening por arquitetura · Boot determinístico · Recovery e backup bare-metal** 
+> **Build dual explícita · Hardening por arquitetura · Boot determinístico · Backup bare-metal**  
 > Gentoo Linux · ThinkPad T490 · GNOME + OpenRC
 
 ---
@@ -19,11 +19,11 @@
 
 ---
 
-Este repositório documenta a jornada de **engenharia, hardening arquitetural e controle determinístico de build** do kernel Linux
+Este repositório documenta a jornada de **compilação, otimização e hardening** do kernel Linux
 (**Gentoo Sources**) para o **Lenovo ThinkPad T490**.
 
 A trajetória parte de um ponto de entrada real — profile GNOME estável + `genkernel` — e evolui
-para um modelo de produção com **arquitetura dual-build determinística e independente** (`safe` e `devops`),
+para um modelo de produção com **duas builds explícitas e independentes** (`safe` e `devops`),
 nomeação determinística de todos os artefatos, hardening aplicado diretamente por arquitetura via
 `menuconfig` e `./scripts/config`, e automação de backup bare-metal direto na nuvem.
 
@@ -157,10 +157,15 @@ desnecessária. Essa limitação é o ponto de partida justificado para a próxi
 > sessão — como o driver de impressora ao conectar via USB — também são capturados: vale fazer
 > um "tour" completo pelo hardware antes de rodar o comando.
 
+> 📌 **Nota histórica:** este passo foi executado sobre o source original `linux-6.12.58-gentoo`
+> **antes** de criar os diretórios `gentoo-safe` e `gentoo-devops` (Fase 2). A `.config`
+> resultante tornou-se a base estável que originou o kernel safe. Está documentado aqui para
+> contextualizar a origem da configuração, não como um passo executável no fluxo atual.
+
 Com o sistema em uso real e todos os dispositivos ativos:
 
 ```bash
-cd /usr/src/linux-6.12.58-gentoo-safe
+cd /usr/src/linux-6.12.58-gentoo
 make localmodconfig
 ```
 
@@ -277,6 +282,10 @@ mail-client/evolution   heavy-build.conf
 
 ## 🧩 Fase 1 — Snapshot de Segurança
 
+> 📌 **Nota:** os comandos abaixo pressupõem que a estrutura `kernels/` e `initramfs/` em `/boot`
+> já existe. Em uma instalação fresca com `genkernel`, os artefatos ficam na raiz de `/boot` —
+> ajuste os caminhos de origem conforme o estado atual do seu sistema antes de executar.
+
 Antes de qualquer modificação, salve o estado atual do kernel funcional:
 
 ```bash
@@ -290,6 +299,11 @@ cp /boot/config-*        /root/kernel-snapshots/safe/ 2>/dev/null
 ---
 
 ## 🧬 Fase 2 — Criar Diretórios Físicos dos Kernels
+
+> 📌 **Nota histórica:** este passo foi executado a partir do source original `linux-6.12.58-gentoo`,
+> que já não existe em `/usr/src/` — os diretórios `gentoo-safe` e `gentoo-devops` são o resultado
+> final desse processo. Para um novo ciclo de atualização, substitua o source base pelo novo
+> (ex.: `linux-6.18.12-gentoo`) e repita o mesmo padrão de nomenclatura.
 
 ```bash
 cd /usr/src
@@ -305,33 +319,31 @@ cp -a linux-6.12.58-gentoo linux-6.12.58-gentoo-devops
 
 ## 🛡️ Fase 3 — Build do Kernel SAFE (Fallback Imutável)
 
-O kernel `safe` é construído a partir de uma `.config` estável e auditada. Após compilado
-e validado, **não é modificado** — serve exclusivamente como fallback garantido. A configuração
-base (golden config) é versionada neste próprio repositório para garantir reprodutibilidade (IaC).
+O kernel `safe` é construído a partir de uma `.config` estável e conhecida. Após compilado
+e validado, **não é modificado** — serve exclusivamente como fallback garantido.
 
 ```bash
-# 1. Entra estritamente no diretório físico do kernel safe
 cd /usr/src/linux-6.12.58-gentoo-safe
 
-# 2. Recupera a configuração estável diretamente do repositório versionado
-cp ~/linux-6.12.58-gentoo/configs/config-6.12.58-safe .config
+# A .config de referência do safe já está preservada em /boot
+cp /boot/config-6.12.58-gentoo-safe .config
 
-# 3. Resolve novas opções do Kconfig com os defaults seguros
+# Resolve novas opções do Kconfig com os defaults seguros
 make olddefconfig
 
-# 4. Compila usando todos os núcleos físicos/lógicos disponíveis
+# Compila usando todos os núcleos disponíveis
 make -j$(nproc)
 
-# 5. Instala os módulos no sistema (/lib/modules/6.12.58-gentoo-safe/)
-make modules_install
+# Instala os módulos em /lib/modules/6.12.58-gentoo-safe/
+make modules_install INSTALL_MOD_PATH=/
 
-# 6. Copia o kernel para a estrutura isolada de boot
+# Copia o kernel para a estrutura de /boot
 cp arch/x86/boot/bzImage /boot/kernels/6.12.58-safe
 
-# 7. Salva a .config de referência na raiz de /boot para auditoria rápida
+# Salva a .config de referência na raiz de /boot
 cp .config /boot/config-6.12.58-gentoo-safe
 
-# 8. Gera o initramfs com kver hardcoded, vinculado exclusivamente a esta arquitetura
+# Gera o initramfs com kver hardcoded
 dracut --force \
   /boot/initramfs/6.12.58-safe.img \
   6.12.58-gentoo-safe
@@ -601,7 +613,7 @@ CONFIG_LEGACY_VSYSCALL_EMULATE" .config
 ```bash
 # Execute dentro do diretório de source do kernel que deseja auditar
 cd /usr/src/linux-6.12.58-gentoo-devops
-bash /path/to/repo/scripts/diag-kernel.sh
+bash ~/gentoo-kernel-t490/scripts/diag-kernel.sh
 ```
 
 Ver: [`scripts/diag-kernel.sh`](scripts/diag-kernel.sh)
