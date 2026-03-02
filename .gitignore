@@ -1,31 +1,47 @@
-# Kernel build artifacts
-*.o
-*.ko
-*.mod
-*.mod.c
-*.symvers
-*.order
-*.cmd
-*.d
+# ==============================================================================
+# .gitignore para Infraestrutura Gentoo / Kernel Scripts
+# ==============================================================================
 
-# Kernel configuration
+# 1. Arquivos de Backup e Arquivamento (Bloqueio Crítico)
+*.tar.zst
+*.tar.gz
+*.tar.xz
+*.bak
+*.backup
+*.img
+*.iso
+
+# 2. Artefatos de Compilação de Kernel (Caso o script rode no diretório errado)
 .config
 .config.old
-.config.*
+Module.symvers
+modules.order
+*.o
+*.ko
+*.mod.c
+*.mod
+.built-in.a
+vmlinux
+System.map
 
-# Build outputs
-/ vmlinux
-/System.map
-/Module.symvers
-/modules.builtin
-/modules.order
-
-# Installed modules
-/lib/modules/
-
-# Logs and temp files
-*.log
-*.tmp
+# 3. Arquivos Temporários de Editores (Vim, Nano, Emacs)
 *~
-*.bak
-*.swp
+.*.sw[a-p]
+.*.swo
+DEADJOE
+\#*\#
+
+# 4. Logs e Dumps do Sistema
+*.log
+*.err
+*.out
+crash_notes/
+
+# 5. Diretórios de IDEs e Ferramentas (VSCode, etc.)
+.vscode/
+.idea/
+*.sublime-workspace
+
+# 6. Lixo de SO Específico (Pendrives montados, etc.)
+.DS_Store
+Thumbs.db
