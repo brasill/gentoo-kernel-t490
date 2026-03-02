@@ -650,13 +650,19 @@ dracut --force \
 
 Como a estrutura de `/boot` usa subdiretórios (`kernels/` e `initramfs/`) fora do padrão esperado pelo `grub-mkconfig`, a detecção automática deve ser desativada para dar lugar a entradas explícitas e hardcoded.
 
-> ⚠️ **ATENÇÃO: UUIDs Únicos de Hardware**
+> ⚠️ **ATENÇÃO 1: UUIDs Únicos de Hardware**
 > Os valores de UUID no script abaixo (`EED9-6AFE` para a partição EFI e `48d42ece-...` para a partição raiz) pertencem **exclusivamente** ao SSD NVMe Kingston desta máquina. 
 > Se for reproduzir este setup em outro hardware, **você deve obrigatoriamente substituir esses valores**. 
-> Para descobrir os UUIDs corretos do seu disco, execute:
+> Para descobrir os UUIDs corretos do seu disco, execute `blkid` e identifique:
+> 1. A partição EFI (geralmente formatada como `TYPE="vfat"`)
+> 2. A partição Raiz `/` do Linux (geralmente formatada como `TYPE="ext4"`, `xfs` ou `btrfs`)
+> 
 > ```bash
-> blkid 
+> blkid
 > ```
+
+> ⚠️ **ATENÇÃO 2: Manutenção de Versões (Hardcoded)**
+> O princípio do boot determinístico exige que o bootloader saiba exatamente o que carregar. As versões do kernel (ex: `6.12.58-devops`) estão "chumbadas" no script abaixo. **Em atualizações futuras (ex: migração para o source `linux-6.18.12-gentoo`), você deverá editar este arquivo `40_custom` e alterar os números de versão** antes de regerar o GRUB. (Nota: A nossa automação `deploy-kernel` audita essa consistência e emitirá um alerta caso você esqueça).
 
 Desative a varredura genérica e crie o seu script de boot personalizado, garantindo um boot determinístico:
 
