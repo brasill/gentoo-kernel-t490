@@ -648,8 +648,17 @@ dracut --force \
 
 ## 🧭 Fase 5 — GRUB (Grand Finale)
 
-Como a estrutura de `/boot` usa subdiretórios (`kernels/` e `initramfs/`) fora do padrão
-esperado pelo `grub-mkconfig`, desative a detecção automática e defina entradas explícitas:
+Como a estrutura de `/boot` usa subdiretórios (`kernels/` e `initramfs/`) fora do padrão esperado pelo `grub-mkconfig`, a detecção automática deve ser desativada para dar lugar a entradas explícitas e hardcoded.
+
+> ⚠️ **ATENÇÃO: UUIDs Únicos de Hardware**
+> Os valores de UUID no script abaixo (`EED9-6AFE` para a partição EFI e `48d42ece-...` para a partição raiz) pertencem **exclusivamente** ao SSD NVMe Kingston desta máquina. 
+> Se for reproduzir este setup em outro hardware, **você deve obrigatoriamente substituir esses valores**. 
+> Para descobrir os UUIDs corretos do seu disco, execute:
+> ```bash
+> blkid 
+> ```
+
+Desative a varredura genérica e crie o seu script de boot personalizado, garantindo um boot determinístico:
 
 ```bash
 chmod -x /etc/grub.d/10_linux
